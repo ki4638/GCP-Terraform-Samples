@@ -20,6 +20,7 @@ resource "google_compute_subnetwork" "management-sub" {
   ip_cidr_range = "10.0.0.0/24"
   network       = "${google_compute_network.management.self_link}"
   region        = "${var.region}"
+  private_ipv6_google_access = true
 }
 
 resource "google_compute_network" "management" {
@@ -33,6 +34,7 @@ resource "google_compute_subnetwork" "untrust-sub" {
   ip_cidr_range = "10.0.1.0/24"
   network       = "${google_compute_network.untrust.self_link}"
   region        = "${var.region}"
+  private_ipv6_google_access = true
 }
 
 resource "google_compute_network" "untrust" {
@@ -46,6 +48,7 @@ resource "google_compute_subnetwork" "trust-sub" {
   ip_cidr_range = "10.0.2.0/24"
   network       = "${google_compute_network.trust.self_link}"
   region        = "${var.region}"
+  private_ipv6_google_access = true
 }
 
 resource "google_compute_network" "trust" {
@@ -239,6 +242,9 @@ resource "google_container_cluster" "primary" {
   }
 
   node_config {
+    shielded_instance_config {
+      enable_secure_boot = true
+    }
     machine_type = "f1-micro"
 
     oauth_scopes = [
@@ -247,6 +253,11 @@ resource "google_container_cluster" "primary" {
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
     ]
+  }
+  min_master_version = "1.12"
+  enable_intranode_visibility = true
+  network_policy {
+    enabled = true
   }
 }
 
