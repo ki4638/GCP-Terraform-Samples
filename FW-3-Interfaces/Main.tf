@@ -17,6 +17,7 @@ resource "google_compute_subnetwork" "management-sub" {
   ip_cidr_range = "10.0.0.0/24"
   network       = "${google_compute_network.management.self_link}"
   region        = "${var.region}"
+  private_ipv6_google_access = true
 }
 
 resource "google_compute_network" "management" {
@@ -30,6 +31,7 @@ resource "google_compute_subnetwork" "untrust-sub" {
   ip_cidr_range = "10.0.1.0/24"
   network       = "${google_compute_network.untrust.self_link}"
   region        = "${var.region}"
+  private_ipv6_google_access = true
 }
 
 resource "google_compute_network" "untrust" {
@@ -43,6 +45,7 @@ resource "google_compute_subnetwork" "trust-sub" {
   ip_cidr_range = "10.0.2.0/24"
   network       = "${google_compute_network.trust.self_link}"
   region        = "${var.region}"
+  private_ipv6_google_access = true
 }
 
 resource "google_compute_network" "trust" {
